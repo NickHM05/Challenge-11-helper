@@ -1,17 +1,22 @@
-const store = require("../db/store");
+// DEPENDENCIES
+// We need to include the path package to get the correct file path for our html
+const path = require("path");
 
-const router= require ("express").Router;
-//gonna need an import store file called store.js under the db folder
-//gonna need a getAllnotes route.
-router.get('/notes', (req,res)=> {
-    store
-    .getNotes()
-    .then((notes)=>{
-        return res.json(notes)
-    }).catch ((err)=> res.status(500).json(err))
-}) 
-//gonna need a postNotes.route
-//gonna need a deleteNotes.route
+// ROUTING
+// exporting the router to other modules
+module.exports = (app) => {
+  // HTML GET Requests
+  // Below code handles when users "visit" a page.
+  // In each of the below cases the user is shown an HTML page of content
 
+  // GET /notes should return the notes.html file.
+  app.get("/notes", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/notes.html"));
+  });
 
-module.exports = router;
+  // GET * should return the index.html file.
+  // If no matching route is found default to home
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/index.html"));
+  });
+};
